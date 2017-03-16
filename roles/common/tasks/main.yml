@@ -1,0 +1,11 @@
+---
+
+
+- name: Set hostname
+  command: hostnamectl set-hostname {{ name }}.{{ domain }}
+
+- name: Copy yum repo file 
+  copy: src=/repo/local.repo dest=/etc/yum.repos.d/local.repo
+
+- name: yum update
+  yum: name=* state=latest
