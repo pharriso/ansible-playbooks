@@ -1,0 +1,9 @@
+---
+- hosts: packer
+  connection: local
+  roles:
+    - vm
+
+- hosts: packer
+  roles:
+    - common
