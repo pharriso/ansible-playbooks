@@ -4,8 +4,8 @@
 - name: Set hostname
   command: hostnamectl set-hostname {{ name }}.{{ domain }}
 
-- name: Copy yum repo file 
-  copy: src=/repo/local.repo dest=/etc/yum.repos.d/local.repo
+- name: Enable RHEL7 yum repo
+  yum_repository: name=rhel7 description=rhel7 baseurl=http://192.168.122.1/repo/rhel-7-server-rpms/Packages gpgcheck=no file=local
 
 - name: yum update
   yum: name=* state=latest

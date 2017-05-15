@@ -1,0 +1,14 @@
+---
+
+- name: Enable RHEL7 OSP10 ops repos
+  yum_repository: name={{ item }} description={{ item }} baseurl=http://192.168.122.1/repo/{{ item }}/Packages gpgcheck=no file=local
+  with_items:
+    - grafana
+    - graphite-web
+    - rhel-7-server-openstack-10-optools-rpms
+
+- name: Install grafana Package
+  yum: name=grafana state=present
+
+- name: Install graphite-web Package
+  yum: name=graphite-web state=present

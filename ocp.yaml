@@ -1,0 +1,10 @@
+---
+- hosts: ocp
+  connection: local
+  roles:
+    - vm
+
+- hosts: ocp
+  roles:
+    - common
+    - ocp

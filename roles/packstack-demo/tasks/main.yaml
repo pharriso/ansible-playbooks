@@ -1,0 +1,48 @@
+---
+
+- name: Upload cirros image
+  os_image: name=cirros disk_format=qcow2 state=present filename=/repo/osp-images/cirros-0.3.4-x86_64-disk.img
+
+- name: Create internal network
+  os_network: name=internal state=present
+  
+- name: Create internal subnet
+  os_subnet: state=present network_name=internal name=internal-subnet cidr=10.0.0.0/24
+
+- name: Create external network
+  os_network: name=external state=present external=true
+  
+- name: Create external subnet
+  os_subnet: state=present network_name=external name=external-subnet cidr=192.168.122.0/24 enable_dhcp=false gateway_ip=192.168.122.1 allocation_pool_start=192.168.122.170 allocation_pool_end=192.168.122.175
+
+- name: Create router
+  os_router: 
+    name: router 
+    state: present 
+    network: external 
+    interfaces:
+      - internal-subnet
+
+- name: Create SSH security group
+  os_security_group: name=ssh
+
+
+- name: Add SSH to security ssh security group
+  os_security_group_rule: security_group=ssh protocol=tcp port_range_min=22 port_range_max=22
+
+- name: Create key
+  os_keypair: name=test-key public_key_file=/root/.ssh/id_rsa.pub
+
+- name: Launch cirros instance
+  os_server: 
+    state: present 
+    name: ansible-vm 
+    image: cirros 
+    flavor: m1.tiny 
+    nics:
+      - net-name: internal
+    key_name: test-key
+    security_groups: default,ssh
+
+- name: Create floating ip
+  os_floating_ip: server=ansible-vm network=external

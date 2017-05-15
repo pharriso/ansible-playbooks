@@ -1,0 +1,34 @@
+---
+
+- name: Enable RHEL7 OSP10 repos
+  yum_repository: name={{ item }} description={{ item }} baseurl=http://192.168.122.1/repo/{{ item }}/Packages gpgcheck=no file=local
+  with_items:
+    - rhel-7-server-openstack-10-devtools-rpms
+    - rhel-7-server-openstack-10-rpms
+    - rhel-7-server-extras-rpms
+
+- name: Disable NetworkManager
+  service: name=NetworkManager state=stopped enabled=no
+
+- name: Install packstack Package
+  yum: name=openstack-packstack state=present
+
+- name: Generate packstack answer file
+  shell: packstack --gen-answer-file=/root/answers.txt --keystone-admin-passwd=redhat123 --provision-demo=n --os-neutron-ovs-bridge-interfaces=br-ex:eth0 --os-neutron-ovs-bridge-mappings=physnet1:br-ex
+  args:
+    creates: /root/answers.txt
+
+- name: Run packstack
+  shell: packstack --answer-file=/root/answers.txt
+  args:
+    creates: /root/keystonerc_admin
+
+#- name: Configure eth0
+#  copy: src=/ansible/roles/packstack/files/ifcfg-eth0 dest=/etc/sysconfig/network-scripts/ifcfg-eth0
+#  notify:
+#    - restart network
+  
+#- name: Configure br-ex
+#  template: src=/ansible/roles/packstack/templates/ifcfg-br-ex.j2 dest=/etc/sysconfig/network-scripts/ifcfg-br-ex
+#  notify:
+#    - restart network

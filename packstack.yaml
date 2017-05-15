@@ -1,0 +1,17 @@
+---
+- hosts: packstack
+  connection: local
+  roles:
+    - vm
+
+- hosts: packstack
+  gather_facts: false
+  roles:
+    - common
+    - packstack
+
+- hosts: packstack
+  gather_facts: false
+  connection: local
+  roles:
+    - packstack-demo

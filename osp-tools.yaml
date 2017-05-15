@@ -1,0 +1,10 @@
+---
+- hosts: osp-tools
+  connection: local
+  roles:
+    - vm
+
+- hosts: osp-tools
+  roles:
+    - common
+    - osp-tools

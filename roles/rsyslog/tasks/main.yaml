@@ -1,0 +1,18 @@
+---
+
+- name: Install rsyslog Package
+  yum: name=rsyslog state=present
+
+- name: Open up firewall ports
+  firewalld: service=syslog permanent=true state=enabled immediate=yes
+
+- name: Start rsyslog service
+  service: name=rsyslog state=running enabled=yes
+
+- name: rsyslog config
+  lineinfile: dest=/etc/rsyslog.conf line={{ item }}
+  with_items:
+    - "$ModLoad imudp"
+    - "$UDPServerRun 514"
+  notify:
+    - restart rsyslog

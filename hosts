@@ -1,0 +1,60 @@
+[old7]
+192.168.10.6 repo=old7.repo ospvers=7
+
+[osp7]
+192.168.10.3
+[osp7:vars]
+repo=osp7.repo
+ospvers=7
+
+[osp9]
+192.168.10.5
+
+[osp10]
+192.168.10.5
+
+[osp10:vars]
+repo=osp10.repo
+ospvers=10
+
+
+[openstack]
+192.168.122.4
+
+[scaleio]
+192.168.122.30
+192.168.122.31
+
+[generic]
+192.168.122.7
+
+[allinone]
+192.168.122.22 ip=192.168.122.22 name=allinone memory=8 vcpu=4
+
+[testbuild]
+192.168.122.23 ip=192.168.122.23 name=testbuild memory=1 vcpu=1
+
+[rsyslog]
+192.168.122.24 ip=192.168.122.24 name=rsyslog
+
+[packer]
+192.168.122.25 ip=192.168.122.25 name=packer
+
+[capsule]
+192.168.122.10 ip=192.168.122.10 name=capsule62
+
+[ospbet]
+192.168.10.7 ip=192.168.10.7 name=ospbet vcpu=2 memory=6
+
+[osp-tools]
+192.168.122.27 ip=192.168.122.27 name=osp-tools vcpu=1 memory=4
+
+[packstack]
+192.168.122.28 ip=192.168.122.28 name=packstack vcpu=4 memory=8
+
+[sat6]
+192.168.122.8
+
+[ocp]
+192.168.122.60 ip=192.168.122.60 name=ocp-master1 vcpu=2 memory=4 disk=40
+192.168.122.65 ip=192.168.122.65 name=ocp-node1 vcpu=2 memory=4 disk=40

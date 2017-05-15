@@ -1,0 +1,10 @@
+---
+- hosts: rsyslog
+  connection: local
+  roles:
+    - vm
+
+- hosts: rsyslog
+  roles:
+    - common
+    - rsyslog

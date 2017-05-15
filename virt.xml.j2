@@ -34,6 +34,14 @@
       <boot order='1'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
     </disk>
+{% if disk is defined %}
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/lib/libvirt/images/{{ name }}-disk2.qcow2'/>
+      <target dev='vdb' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x0a' function='0x0'/>
+    </disk>
+{% endif %} 
     <disk type='block' device='cdrom'>
       <driver name='qemu' type='raw'/>
       <target dev='hda' bus='ide'/>
