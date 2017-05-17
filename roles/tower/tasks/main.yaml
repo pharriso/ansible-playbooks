@@ -1,0 +1,14 @@
+---
+
+- name: Unpack tower tar file
+  unarchive: src=/repo/ansible-tower-setup-bundle-latest.el7.tar.gz dest=/root
+
+- name: Find ansible tower dir
+  shell: ls -d ansible*
+  register: dir
+
+- name: Copy hosts file across
+  copy: src=/ansible/roles/tower/files/hosts dest=/root/{{ dir.stdout }}
+
+- name: Run Installer
+  shell: /root/{{ dir.stdout }}/setup.sh -i /root/{{ dir.stdout }}/hosts

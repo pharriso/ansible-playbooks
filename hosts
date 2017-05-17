@@ -58,3 +58,6 @@ ospvers=10
 [ocp]
 192.168.122.60 ip=192.168.122.60 name=ocp-master1 vcpu=2 memory=4 disk=40
 192.168.122.65 ip=192.168.122.65 name=ocp-node1 vcpu=2 memory=4 disk=40
+
+[tower]
+192.168.122.41 ip=192.168.122.41 name=tower vcpu=2 memory=4
