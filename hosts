@@ -17,16 +17,9 @@ ospvers=7
 repo=osp10.repo
 ospvers=10
 
-
-[openstack]
-192.168.122.4
-
 [scaleio]
 192.168.122.30
 192.168.122.31
-
-[generic]
-192.168.122.7
 
 [allinone]
 192.168.122.22 ip=192.168.122.22 name=allinone memory=8 vcpu=4
@@ -61,3 +54,11 @@ ospvers=10
 
 [tower]
 192.168.122.41 ip=192.168.122.41 name=tower vcpu=2 memory=4
+
+[haproxy]
+192.168.122.43 ip=192.168.122.43 name=haproxy1 vcpu=1 memory=1 vip=192.168.122.47 keepalive_state=MASTER keepalive_prio=101
+192.168.122.44 ip=192.168.122.44 name=haproxy2 vcpu=1 memory=1 vip=192.168.122.47 keepalive_state=BACKUP keepalive_prio=100
+
+[web]
+192.168.122.45 ip=192.168.122.45 name=web1 vcpu=1 memory=1
+192.168.122.46 ip=192.168.122.46 name=web2 vcpu=1 memory=1

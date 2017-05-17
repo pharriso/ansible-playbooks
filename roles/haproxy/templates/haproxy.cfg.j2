@@ -1,0 +1,39 @@
+global
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+frontend http_web *:80
+    mode http
+    default_backend web
+
+#frontend rgw­-https
+#  bind <insert vip ipv4>:443 ssl crt /etc/ssl/private/example.com.pem
+#  default_backend rgw
+
+backend web
+    balance roundrobin
+    mode http
+    server  web1 192.168.122.45:80 check
+    server  web2 192.168.122.46:80 check

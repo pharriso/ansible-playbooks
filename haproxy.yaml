@@ -1,0 +1,11 @@
+---
+- hosts: haproxy
+  connection: local
+  roles:
+    - vm
+
+- hosts: haproxy
+  roles:
+    - common
+    - keepalived
+    - haproxy
