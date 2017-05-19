@@ -1,0 +1,57 @@
+---
+
+- name: Add stack user
+  user: name=stack 
+  tags: osp-director
+
+- name: Create images and templates directories
+  file: path=/home/stack/{{ item }} state=directory mode=0775 owner=stack group=stack
+  with_items:
+    - templates
+    - images
+  tags: osp-director
+
+- name: Add director IP to /etc/hosts
+  lineinfile: dest=/etc/hosts line='{{ansible_default_ipv4.address}} {{ansible_fqdn}} {{ansible_hostname}}'
+  tags: osp-director
+
+- name: Create stack sudoers file
+  copy: content="stack ALL=(root) NOPASSWD:ALL" dest=/etc/sudoers.d/stack force=no group=root owner=root mode=0644
+  tags: osp-director
+
+- name: Enable OSP repos
+  yum_repository: name={{ item }} description={{ item }} baseurl=http://192.168.122.1/repo/{{ item }}/Packages gpgcheck=no file=local
+  with_items:
+    - rhel-7-server-extras-rpms
+    - rhel-7-server-rh-common-rpms
+    - rhel-ha-for-rhel-7-server-rpms
+    - rhel-7-server-openstack-11-rpms
+  tags: osp-director
+
+- name: Install OSP-D Packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - python-tripleoclient
+    - rhosp-director-images
+    - rhosp-director-images-ipa
+    - libguestfs-tools
+  tags: osp-director
+
+- name: Unpack overcloud images
+  unarchive: src=/usr/share/rhosp-director-images/{{ item }} dest=/home/stack/images copy=no
+  with_items:
+    - overcloud-full-latest-{{ ospvers }}.0.tar
+    - ironic-python-agent-latest-{{ ospvers }}.0.tar
+  tags: osp-director
+
+- name: Copy undercloud.conf in place
+  template:  src=/ansible/roles/osp-director/templates/{{ ospvers }}undercloud.conf.j2 dest=/home/stack/undercloud.conf owner=stack group=stack
+  tags: osp-director
+
+- name: Install undercloud
+  become: yes
+  become_user: stack
+  shell: openstack undercloud install
+  args:
+    creates: /home/stack/stackrc
+  tags: osp-director

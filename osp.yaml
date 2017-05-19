@@ -1,0 +1,11 @@
+---
+- hosts: osp
+  connection: local
+  roles:
+    - vm
+
+- hosts: osp
+  gather_facts: false
+  roles:
+    - common
+    - osp-director

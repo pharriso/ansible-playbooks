@@ -1,21 +1,11 @@
-[old7]
-192.168.10.6 repo=old7.repo ospvers=7
-
-[osp7]
-192.168.10.3
-[osp7:vars]
-repo=osp7.repo
-ospvers=7
-
-[osp9]
-192.168.10.5
-
 [osp10]
-192.168.10.5
+192.168.10.5 ospvers=10
 
-[osp10:vars]
-repo=osp10.repo
-ospvers=10
+[osp11]
+192.168.122.150 ip=192.168.122.150 name=undercloud11 memory=6 vcpu=2 ospvers=11
+
+[osp:children]
+osp11
 
 [scaleio]
 192.168.122.30
@@ -24,8 +14,8 @@ ospvers=10
 [allinone]
 192.168.122.22 ip=192.168.122.22 name=allinone memory=8 vcpu=4
 
-[testbuild]
-192.168.122.23 ip=192.168.122.23 name=testbuild memory=1 vcpu=1
+[testvms]
+192.168.122.50 ip=192.168.122.50 name=test1 memory=1 vcpu=1
 
 [rsyslog]
 192.168.122.24 ip=192.168.122.24 name=rsyslog

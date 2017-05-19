@@ -7,4 +7,5 @@
 - hosts: osp-tools
   roles:
     - common
-    - osp-tools
+    - epel
+    #- osp-tools
