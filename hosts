@@ -1,10 +1,11 @@
 [osp10]
-192.168.10.5 ospvers=10
+192.168.122.151 ip=192.168.122.151 name=undercloud10 memory=6 vcpu=2 ospvers=10 nic2=prov nic3=trunk1 nic3ip=192.168.10.3 nic3vlan=10
 
 [osp11]
-192.168.122.150 ip=192.168.122.150 name=undercloud11 memory=6 vcpu=2 ospvers=11
+192.168.122.150 ip=192.168.122.150 name=undercloud11 memory=8 vcpu=2 ospvers=11
 
 [osp:children]
+osp10
 osp11
 
 [scaleio]
@@ -40,7 +41,10 @@ osp11
 
 [ocp]
 192.168.122.60 ip=192.168.122.60 name=ocp-master1 vcpu=2 memory=4 disk=40
+192.168.122.61 ip=192.168.122.61 name=ocp-master2 vcpu=2 memory=4 disk=40
+192.168.122.62 ip=192.168.122.62 name=ocp-master3 vcpu=2 memory=4 disk=40
 192.168.122.65 ip=192.168.122.65 name=ocp-node1 vcpu=2 memory=4 disk=40
+192.168.122.66 ip=192.168.122.66 name=ocp-node2 vcpu=2 memory=4 disk=40
 
 [tower]
 192.168.122.41 ip=192.168.122.41 name=tower vcpu=2 memory=4

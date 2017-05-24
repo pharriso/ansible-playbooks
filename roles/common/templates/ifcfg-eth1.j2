@@ -1,0 +1,11 @@
+{% if nic2vlan is defined %}
+VLAN=yes
+DEVICE=eth1.{{ nic2vlan }}
+{% else %}
+TYPE=Ethernet
+DEVICE=eth1
+{% endif %}
+IPADDR={{ nic2ip }}
+NETMASK=255.255.255.0
+ONBOOT=yes
+BOOTPROTO=static

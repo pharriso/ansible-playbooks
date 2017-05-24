@@ -3,9 +3,26 @@
 
 - name: Set hostname
   command: hostnamectl set-hostname {{ name }}.{{ domain }}
+  tags: common
 
 - name: Enable RHEL7 yum repo
   yum_repository: name=rhel7 description=rhel7 baseurl=http://192.168.122.1/repo/rhel-7-server-rpms/Packages gpgcheck=no file=local
+  tags: common
 
 - name: yum update
   yum: name=* state=latest
+  tags: common
+
+- name: Configuring additional nic - nic2
+  template: src=/ansible/roles/common/templates/ifcfg-eth1.j2 dest=/etc/sysconfig/network-scripts/ifcfg-eth1.{{ nic2vlan }}
+  when: nic2ip is defined
+  tags: common
+  notify:
+    - restart network
+
+- name: Configuring additional nic - nic3
+  template: src=/ansible/roles/common/templates/ifcfg-eth2.j2 dest=/etc/sysconfig/network-scripts/ifcfg-eth2.{{ nic3vlan }}
+  when: nic3ip is defined
+  tags: common
+  notify:
+    - restart network

@@ -40,6 +40,6 @@
 - name: create OCP disk
   shell:  docker-storage-setup
   args:
-    create: /dev/docker-vg
+    creates: /dev/docker-vg
 
 
