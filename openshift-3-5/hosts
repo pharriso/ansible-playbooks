@@ -11,6 +11,11 @@ ansible_ssh_user=root
 ### OpenShift Basic Vars
 ###########################################################################
 
+#openshift_http_proxy=http://proxy01.intranet.prod.int.phx2.redhat.com
+#openshift_https_proxy=https://proxy01.intranet.prod.int.phx2.redhat.com
+#openshift_no_proxy='.example.com'
+openshift_docker_additional_registries=registry.example.com:5000
+openshift_docker_insecure_registries=registry.example.com:5000
 deployment_type=openshift-enterprise
 # openshift_image_tag=v3.5
 # openshift_release=v3.5.5.5

@@ -1,0 +1,5 @@
+disk_size: 50
+min_disk_gb: 40
+foreman_org: Sandcliffe
+foreman_loc: Midway
+foreman_password: Redhat123

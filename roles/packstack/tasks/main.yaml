@@ -1,10 +1,10 @@
 ---
 
-- name: Enable RHEL7 OSP10 repos
+- name: Enable RHEL7 openstack repos
   yum_repository: name={{ item }} description={{ item }} baseurl=http://192.168.122.1/repo/{{ item }}/Packages gpgcheck=no file=local
   with_items:
-    - rhel-7-server-openstack-10-devtools-rpms
-    - rhel-7-server-openstack-10-rpms
+    - rhel-7-server-openstack-{{ ospvers }}-devtools-rpms
+    - rhel-7-server-openstack-{{ ospvers }}-rpms
     - rhel-7-server-extras-rpms
 
 - name: Disable NetworkManager

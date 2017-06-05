@@ -1,0 +1,74 @@
+---
+
+- name: Enable Satellite repos
+  yum_repository: name={{ item }} description={{ item }} baseurl=http://192.168.122.1/repo/{{ item }}/Packages gpgcheck=no file=local
+  with_items:
+    - rhel-7-server-rpms
+    - rhel-server-rhscl-7-rpms
+    - rhel-7-server-satellite-6.2-rpms
+  tags: satellite
+
+- name: Install Satellite Packages
+  yum: name=satellite state=present
+  tags: satellite
+
+- name: Set number of bytes in 1GB
+  set_fact:
+    bytes_gb: 1073741824
+  tags: satellite
+
+- name: Error if disk isn't big enough
+  fail: msg="Disk size is not big enough. Disk needs to be {{ bytes_gb | int * min_disk_gb | int }} and currently {{ facter_blockdevice_vdb_size }} "
+  failed_when:  "facter_blockdevice_vdb_size | int  <  bytes_gb | int * min_disk_gb | int "
+  tags: satellite
+
+- name: Create LVM partition
+  parted: device=/dev/vdb number=1 state=present
+  tags: satellite
+
+- name: Create data VG
+  lvg: vg=vg-data pvs=/dev/vdb1
+  tags: satellite
+
+- name: Create satellite lvols
+  lvol: vg=vg-data lv={{ item.lvol_name }} size={{ item.lvol_size }}
+  with_items:
+    - lvol_name: mongodb 
+      lvol_size: 10g
+    - lvol_name: pulp 
+      lvol_size: 28g
+  tags: satellite
+
+- name: Create filesystems
+  filesystem: fstype=xfs dev=/dev/vg-data/{{ item }}
+  with_items:
+    - mongodb
+    - pulp
+  tags: satellite
+
+- name: Mount filesystems
+  mount: path={{ item.mount_point }} src={{ item.mount_dev }} state=mounted fstype=xfs
+  with_items:
+    - mount_point: /var/lib/mongodb
+      mount_dev: /dev/vg-data/mongodb
+    - mount_point: /var/lib/pulp
+      mount_dev: /dev/vg-data/pulp
+  tags: satellite
+
+- name: Open firewall ports
+  firewalld: permanent=true state=enabled port={{ item }} immediate=true
+  with_items:
+    - 443/tcp
+    - 80/tcp
+    - 5646/tcp
+    - 5647/tcp
+    - 8140/tcp
+    - 9090/tcp
+    - 69/udp
+  tags: satellite
+
+- name: Run satellite installer
+  shell: satellite-installer --scenario satellite --foreman-admin-password {{ foreman_password }} --foreman-proxy-tftp true --foreman-initial-organization {{ foreman_org }} --foreman-initial-location {{ foreman_loc }}
+  tags: satellite
+  args:
+    creates: /etc/httpd/conf.d/05-foreman.conf

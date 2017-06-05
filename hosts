@@ -9,8 +9,10 @@ osp10
 osp11
 
 [scaleio]
-192.168.122.30
-192.168.122.31
+192.168.122.30 ip=192.168.122.30 name=gateway memory=2 vcpu=1 
+192.168.122.31 ip=192.168.122.31 name=mdm1 memory=2 vcpu=1
+192.168.122.32 ip=192.168.122.32 name=sds1 memory=2 vcpu=1 disk=100
+192.168.122.33 ip=192.168.122.33 name=sds2 memory=2 vcpu=1 disk=100
 
 [allinone]
 192.168.122.22 ip=192.168.122.22 name=allinone memory=8 vcpu=4
@@ -34,7 +36,7 @@ osp11
 192.168.122.27 ip=192.168.122.27 name=osp-tools vcpu=1 memory=4
 
 [packstack]
-192.168.122.28 ip=192.168.122.28 name=packstack vcpu=4 memory=8
+192.168.122.28 ip=192.168.122.28 name=packstack vcpu=4 memory=8 ospvers=10
 
 [sat6]
 192.168.122.8
@@ -56,3 +58,6 @@ osp11
 [web]
 192.168.122.45 ip=192.168.122.45 name=web1 vcpu=1 memory=1
 192.168.122.46 ip=192.168.122.46 name=web2 vcpu=1 memory=1
+
+[satellite]
+192.168.122.8 ip=192.168.122.8 name=satellite62 vcpu=2 memory=10 disk=50
