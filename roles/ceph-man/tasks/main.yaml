@@ -1,0 +1,28 @@
+---
+
+- name: Enable repos
+  yum_repository: name={{ item }} description={{ item }} baseurl=http://192.168.122.1/repo/{{ item }}/Packages gpgcheck=no file=local
+  with_items:
+    - rhel-7-server-rpms
+    - rhel-7-server-rhscon-2-installer-rpms
+  tags: ceph-man
+
+- name: Add ceph user
+  user: 
+    name: ceph
+    generate_ssh_key: yes
+  tags: ceph-man
+
+- name: Fetch ssh key from hosts
+  fetch: 
+    src: /home/ceph/.ssh/id_rsa.pub
+    dest: /ansible/roles/ceph-man/files/
+    flat: yes
+  tags: ceph-man
+
+- name: Install ceph-ansible
+  package:
+    name: ceph-common
+    state: present
+  tags: ceph-man
+
