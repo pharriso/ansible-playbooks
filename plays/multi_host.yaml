@@ -1,0 +1,9 @@
+---
+# Examples for hosts
+
+- hosts: 
+  - 'web:!192.168.122.45' # all web servers except
+  - 'web:db' # web or db servers
+  - 'web:&db' # members of both web & db
+
+  tasks:

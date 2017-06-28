@@ -1,0 +1,8 @@
+---
+
+- name: install zsh via include
+  hosts: web
+  
+  tasks:
+
+    - include: install_zsh.yml
