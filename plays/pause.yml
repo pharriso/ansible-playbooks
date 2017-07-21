@@ -1,0 +1,8 @@
+---
+
+- hosts: web
+
+  tasks:
+
+  - name: Do you want to continue
+    pause: 

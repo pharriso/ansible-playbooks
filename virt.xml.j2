@@ -1,5 +1,5 @@
 <domain type='kvm'>
-  <name>{{ name }}</name>
+  <name>{{ ansible_host }}</name>
   <memory unit='GiB'>{{ memory }}</memory>
   <currentMemory unit='GiB'>{{ memory }}</currentMemory>
   <vcpu placement='static'>{{ vcpu }}</vcpu>
@@ -29,7 +29,7 @@
     <emulator>/usr/libexec/qemu-kvm</emulator>
     <disk type='file' device='disk'>
       <driver name='qemu' type='qcow2'/>
-      <source file='/var/lib/libvirt/images/{{ name }}.qcow2'/>
+      <source file='/var/lib/libvirt/images/{{ ansible_host }}.qcow2'/>
       <target dev='vda' bus='virtio'/>
       <boot order='1'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
@@ -37,7 +37,7 @@
 {% if disk is defined %}
     <disk type='file' device='disk'>
       <driver name='qemu' type='qcow2'/>
-      <source file='/var/lib/libvirt/images/{{ name }}-disk2.qcow2'/>
+      <source file='/var/lib/libvirt/images/{{ ansible_host }}-disk2.qcow2'/>
       <target dev='vdb' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x0a' function='0x0'/>
     </disk>

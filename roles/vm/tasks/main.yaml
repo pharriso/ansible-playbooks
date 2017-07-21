@@ -1,39 +1,39 @@
 ---
 
 - name: Update /etc/hosts
-  lineinfile: dest=/etc/hosts line='{{ip}} {{name}}.{{domain}} {{name}}'
+  lineinfile: dest=/etc/hosts line='{{ inventory_hostname }} {{ ansible_host }}.{{domain}} {{ ansible_host }}'
   tags: vm
 
 - name: Copy disk in place
-  command: cp -p /var/lib/libvirt/images/template.qcow2 /var/lib/libvirt/images/{{ name }}.qcow2 
+  command: cp -p /var/lib/libvirt/images/template.qcow2 /var/lib/libvirt/images/{{ ansible_host }}.qcow2 
   args:
-    creates: /var/lib/libvirt/images/{{ name}}.qcow2
+    creates: /var/lib/libvirt/images/{{ ansible_host }}.qcow2
   tags: vm
 
 - name: Create second disk if needed
-  command: qemu-img create -f qcow2 -o preallocation=metadata /var/lib/libvirt/images/{{ name }}-disk2.qcow2 {{ disk }}G
+  command: qemu-img create -f qcow2 -o preallocation=metadata /var/lib/libvirt/images/{{ ansible_host }}-disk2.qcow2 {{ disk }}G
   when: disk is defined
   args:
-    creates: /var/lib/libvirt/images/{{ name }}-disk2.qcow2
+    creates: /var/lib/libvirt/images/{{ ansible_host }}-disk2.qcow2
   tags: vm
 
 - name: Create VM
-  virt: command=define name={{ name}} xml='{{ lookup('template', 'virt.xml.j2') }}'
+  virt: command=define name={{ ansible_host }} xml='{{ lookup('template', 'virt.xml.j2') }}'
   register: result
   tags: vm
 
 - name: Inject SSH Key
-  command: virt-customize -d {{ name }} --ssh-inject root:file:/root/.ssh/id_rsa.pub --selinux-relabel
+  command: virt-customize -d {{ ansible_host }} --ssh-inject root:file:/root/.ssh/id_rsa.pub --selinux-relabel
   when: result|changed
   tags: vm
 
 - name: Set static IP
-  command: virt-customize -d {{ name }} --run-command "echo IPADDR={{ ip }} >> /etc/sysconfig/network-scripts/ifcfg-eth0" 
+  command: virt-customize -d {{ ansible_host }} --run-command "echo IPADDR={{ inventory_hostname }} >> /etc/sysconfig/network-scripts/ifcfg-eth0" 
   when: result|changed
   tags: vm
  
 - name: Start VM
-  virt: state=running name={{ name }}
+  virt: state=running name={{ ansible_host }}
   tags: vm
 
 - name: Wait for server to come back

@@ -2,7 +2,7 @@
 
 
 - name: Set hostname
-  command: hostnamectl set-hostname {{ name }}.{{ domain }}
+  command: hostnamectl set-hostname {{ ansible_host }}.{{ domain }}
   tags: common
 
 - name: Enable RHEL7 yum repo
