@@ -22,23 +22,35 @@
   register: result
   tags: vm
 
-- name: Inject SSH Key
-  command: virt-customize -d {{ ansible_host }} --ssh-inject root:file:/root/.ssh/id_rsa.pub --selinux-relabel
+- name: Get Atomic dir
+  shell: "guestfish add /var/lib/libvirt/images/{{ ansible_host }}.qcow2 : run : mount /dev/rhelah/root / : ls {{ ostree_dir }} | grep -v origin"
+  register: atomic_dir
+  when: result|changed
+  tags: vm
+
+- name: Generate Config file
+  template: 
+    src: ifcfg-eth0.j2
+    dest: /tmp/ifcfg-eth0
   when: result|changed
   tags: vm
 
 - name: Set static IP
-  command: virt-customize -d {{ ansible_host }} --run-command "echo IPADDR={{ inventory_hostname }} >> /etc/sysconfig/network-scripts/ifcfg-eth0" 
+  shell: "guestfish add /var/lib/libvirt/images/{{ ansible_host }}.qcow2 : run : mount /dev/rhelah/root / : copy-in /tmp/ifcfg-eth0  /{{ ostree_dir }}/{{ atomic_dir.stdout }}/etc/sysconfig/network-scripts"
   when: result|changed
   tags: vm
- 
+
+- name: Remove /tmp/ifcfg-eth0
+  file:
+    path: /tmp/ifcfg-eth0
+    state: absent
+  tags: vm
+
 - name: Start VM
   virt: state=running name={{ ansible_host }}
   tags: vm
 
 - name: Wait for server to come back
-  wait_for: host={{ ansible_host }} delay=10 timeout=300 port=22
-  delegate_to: localhost
-  tags: 
-    - vm
-    - wait
+  wait_for: host={{ ansible_ssh_host }} delay=10 timeout=300 port=22
+  connection: local
+  tags: vm

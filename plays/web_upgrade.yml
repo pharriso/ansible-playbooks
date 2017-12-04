@@ -1,0 +1,27 @@
+---
+
+- hosts: web
+  tasks:
+
+  - name: Reboot server
+    shell: sleep 2 && reboot
+    async: 1
+    poll: 0
+    ignore_errors: true
+    register: reboot
+    when: "ansible_fqdn == 'web1.example.com'" 
+
+  - set_fact:
+      rebooted: reboot.changed
+
+- hosts: web
+  remote_user: "{{ lookup('env', 'HOME') }}"
+  tasks:
+
+  - debug: 
+      var: remote_user
+ 
+  - name: Wait for server to come back
+    wait_for: host={{ inventory_hostname }} state=started delay=10 timeout=300 port=22
+    delegate_to: jenkins
+    when: rebooted

@@ -1,0 +1,23 @@
+---
+
+- hosts: localhost
+  connection: local
+  vars:
+    sat_url: https://satellite62.example.com
+    user: admin
+    password: 6dUYrQnLEGKF2Xx5
+  tasks:
+  - name: Check
+    uri:
+      url: "{{ sat_url }}/api/v2/hostgroups"
+      validate_certs: false
+      method: POST
+      headers:
+        Content-Type: "application/json"
+        Accept: "application/json,version=2"
+      body: { "hostgroup":{ "name":"test1234567911", "parent_id":"1" } }
+      body_format: json
+      user: "{{ user }}"
+      password: "{{ password }}"
+      force_basic_auth: yes
+      status_code: 201

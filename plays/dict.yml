@@ -1,0 +1,12 @@
+---
+
+- hosts: localhost
+  connection: local
+  tasks:
+
+  - name: include vars
+    include_vars: vars
+    register: var
+
+  - debug:
+      msg: "Letter is {{ days[ansible_date_time.weekday].hours[ansible_date_time.hour].letter|default ('undefined') }}"

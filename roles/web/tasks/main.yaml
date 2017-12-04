@@ -10,6 +10,6 @@
   service: name=httpd state=started enabled=yes
 
 - name: web content
-  lineinfile: dest=/var/www/html/index.html line="{{ name }}" create=yes
+  lineinfile: dest=/var/www/html/index.html line="{{ ansible_host }}" create=yes
   notify:
     - restart httpd

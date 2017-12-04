@@ -1,0 +1,4 @@
+template: atomic-template
+ostree_dir: /ostree/deploy/rhel-atomic-host/deploy
+authorized_key: /ansible/roles/atomic/files/authorized_keys
+ansible_ssh_pass: root123

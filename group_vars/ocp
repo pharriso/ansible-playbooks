@@ -1,0 +1,3 @@
+template: atomic-template
+ostree_dir: /ostree/deploy/rhel-atomic-host/deploy
+

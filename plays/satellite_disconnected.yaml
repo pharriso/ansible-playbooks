@@ -1,0 +1,23 @@
+---
+
+- hosts: localhost
+  connection: local
+  vars:
+    parent_dir: /var/www/html/pub/content/dist/rhel/server/7/7Server/x86_64
+  tasks:
+  - name: Create parent directories 
+    file:
+      state: directory
+      path: "{{ item }}"
+    with_items:
+      - "{{ parent_dir }}/sat-tools/6.2"
+
+  - name: Create link
+    file:
+      state: link
+      src: "/repo/{{ item.source }}/Packages"
+      dest: "{{ parent_dir }}/{{ item.dest }}"
+    with_items:
+      - {source: "rhel-7-server-rpms", dest: "os" }
+      - {source: "rhel-7-server-satellite-tools-6.2-rpms", dest: "sat-tools/6.2/os" }
+      

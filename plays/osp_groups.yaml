@@ -1,0 +1,19 @@
+--- 
+
+- hosts: localhost
+  connection: local
+  tasks: 
+  - name: Launch Instance
+    os_server:
+      name: vm1
+      image: cirros
+      key_name: test-key
+      timeout: 200
+      flavor: m1.tiny
+      security_groups: ssh
+      nics:
+         - net-name: internal
+      scheduler_hints: 
+        group: 3f7250db-80ad-475d-ab37-e2f55475c5d5
+
+  

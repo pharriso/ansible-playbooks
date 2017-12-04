@@ -2,18 +2,23 @@
 
 - name: Upload cirros image
   os_image: name=cirros disk_format=qcow2 state=present filename=/repo/osp-images/cirros-0.3.4-x86_64-disk.img
+  tags: packstack-demo
 
 - name: Create internal network
   os_network: name=internal state=present
+  tags: packstack-demo
   
 - name: Create internal subnet
   os_subnet: state=present network_name=internal name=internal-subnet cidr=10.0.0.0/24
+  tags: packstack-demo
 
 - name: Create external network
   os_network: name=external state=present external=true
+  tags: packstack-demo
   
 - name: Create external subnet
   os_subnet: state=present network_name=external name=external-subnet cidr=192.168.122.0/24 enable_dhcp=false gateway_ip=192.168.122.1 allocation_pool_start=192.168.122.170 allocation_pool_end=192.168.122.175
+  tags: packstack-demo
 
 - name: Create router
   os_router: 
@@ -22,16 +27,20 @@
     network: external 
     interfaces:
       - internal-subnet
+  tags: packstack-demo
 
 - name: Create SSH security group
   os_security_group: name=ssh
+  tags: packstack-demo
 
 
 - name: Add SSH to security ssh security group
   os_security_group_rule: security_group=ssh protocol=tcp port_range_min=22 port_range_max=22
+  tags: packstack-demo
 
 - name: Create key
   os_keypair: name=test-key public_key_file=/root/.ssh/id_rsa.pub
+  tags: packstack-demo
 
 - name: Launch cirros instance
   os_server: 
@@ -43,6 +52,8 @@
       - net-name: internal
     key_name: test-key
     security_groups: default,ssh
+  tags: packstack-demo
 
 - name: Create floating ip
   os_floating_ip: server=ansible-vm network=external
+  tags: packstack-demo

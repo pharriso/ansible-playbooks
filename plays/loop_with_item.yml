@@ -1,0 +1,11 @@
+---
+
+- hosts: localhost
+  tasks:
+  - name: test
+    shell: echo "{{ item }}"
+    with_items:
+     - one
+     - two
+    register: echo
+    changed_when: echo.stdout != "one"

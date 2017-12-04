@@ -3,9 +3,11 @@
 - name: Enable OCP repos
   yum_repository: name={{ item }} description={{ item }} baseurl=http://192.168.122.1/repo/{{ item }}/Packages gpgcheck=no file=local
   with_items:
-    - rhel-7-server-ose-3.5-rpms
+    - rhel-7-server-ose-3.6-rpms
     - rhel-7-fast-datapath-rpms
     - rhel-7-server-extras-rpms
+  when: atomic is undefined
+  tags: ocp
 
 - name: Install required Packages
   yum: name={{ item }} state=present
@@ -17,6 +19,9 @@
     - iptables-services
     - bridge-utils
     - bash-completion
+    - kexec-tools
+  when: atomic is undefined
+  tags: ocp
 
 - name: Install OCP Packages
   yum: name={{ item }} state=present
@@ -24,22 +29,50 @@
     - atomic-openshift-utils
     - atomic-openshift-excluder
     - atomic-openshift-docker-excluder
+  when: atomic is undefined
+  tags: ocp
 
 - name: Install docker 
   yum: name=docker state=present
+  when: atomic is undefined
+  tags: ocp
 
 - name: Remove OCP packages exclude
   shell: atomic-openshift-excluder unexclude
+  when: atomic is undefined
+  tags: ocp
 
 - name: define OCP disks
   lineinfile: path=/etc/sysconfig/docker-storage-setup line={{ item }}
   with_items:
     - "DEVS=/dev/vdb"
     - "VG=docker-vg"
+  tags: ocp
+  when: atomic is undefined
 
 - name: create OCP disk
   shell:  docker-storage-setup
   args:
     creates: /dev/docker-vg
+  tags: ocp
+  when: atomic is undefined
 
+- name: Copy htpasswd file
+  copy: 
+    dest: /root/htpasswd.openshift
+    src: htpasswd.openshift
+  tags: ocp
 
+- name: Extend root lvol
+  lvol:
+    vg: rhelah
+    lv: root
+    size: +100%FREE
+  when: atomic is defined
+
+- name: Extend / filesystem
+  filesystem:
+    fstype: xfs
+    dev: /dev/rhelah/root
+    resizefs: yes
+  when: atomic is defined

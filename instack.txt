@@ -1,0 +1,6 @@
+52:54:00:ea:97:23 controller-1 N control
+52:54:00:9b:3d:6c controller-2 N control
+52:54:00:d4:ca:30 controller-3 N control
+52:54:00:7b:80:1c compute-1 N compute
+52:54:00:27:3b:33 compute-2 N compute
+52:54:00:20:f9:c5 compute-3 Y compute

@@ -1,0 +1,17 @@
+---
+
+- name: Update rhel template
+  hosts: localhost
+  vars:
+    template: /var/lib/libvirt/images/template.qcow2
+  
+  tasks:
+
+  - name: Add repo file
+    command: virt-customize -a {{ template }} --upload /repo/local.repo:/etc/yum.repos.d/
+
+  - name: Update image
+    command: virt-customize -a {{ template }} --update
+
+  - name: Remove repo file
+    command: virt-customize -a {{ template }} --delete /etc/yum.repos.d/local.repo

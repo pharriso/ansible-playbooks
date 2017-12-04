@@ -1,0 +1,27 @@
+---
+
+- name: Install haproxy Package
+  yum: name=haproxy state=present
+  tags: ocp-haproxy
+
+- name: Open up firewall ports
+  firewalld: 
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+  with_items:
+    - 80/tcp
+    - 443/tcp
+    - 8443/tcp
+  tags: ocp-haproxy
+
+- name: Start haproxy service
+  service: name=haproxy state=started enabled=yes
+  tags: ocp-haproxy
+
+- name: haproxy content
+  template: dest=/etc/haproxy/haproxy.cfg src=/ansible/roles/ocp-haproxy/templates/haproxy.cfg.j2
+  notify:
+    - restart haproxy
+  tags: ocp-haproxy

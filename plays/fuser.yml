@@ -1,0 +1,18 @@
+---
+
+- hosts: localhost
+  tasks:
+  - name: Get processes
+    shell: fuser -m {{ item }}
+    with_items:
+      - /
+      - /boot
+    ignore_errors: true
+    register: fuser
+
+  - shell: fuser -mk {{ item.item }} 
+    when: item.stdout != ''
+    with_items: "{{ fuser.results }}"
+    loop_control:
+      label: "{{ item.item }}"
+  

@@ -1,0 +1,19 @@
+---
+letter: X
+
+days:
+  Monday:
+    hours:
+     '09': 
+       letter: 'A'
+     '10': 
+       letter: 'B'
+  Tuesday:
+    hours:
+     '08': 
+       letter: 'A'
+  Default:
+    hours:
+     '00':
+        letter: 'X'
+
