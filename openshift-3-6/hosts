@@ -6,15 +6,15 @@
 #timeout=60
 #ansible_become=yes
 ansible_ssh_user=root
-ansible_ssh_pass=root123
+ansible_ssh_pass=
 
 ###########################################################################
 ### OpenShift Basic Vars
 ###########################################################################
 
 # Proxies
-#openshift_http_proxy=proxy01.intranet.prod.int.rdu2.redhat.com:3128
-#openshift_https_proxy=proxy01.intranet.prod.int.rdu2.redhat.com:3128
+#openshift_http_proxy=
+#openshift_https_proxy=
 #openshift_no_proxy='.example.com,192.168.122.0/24'
 
 # Registries
@@ -23,7 +23,8 @@ openshift_docker_insecure_registries=registry.example.com:5000
 
 # Deployment version
 deployment_type=openshift-enterprise
-openshift_image_tag=v3.6.173.0.21
+openshift_image_tag=v3.6.173.0.49
+#openshift_image_tag=v3.6.173.0.21
 # openshift_release=v3.5.5.5
 # docker_version='1.12.5'
 
@@ -97,7 +98,6 @@ openshift_master_htpasswd_file=/root/htpasswd.openshift
 #openshift_hosted_metrics_storage_volume_name=metrics
 #openshift_hosted_metrics_storage_volume_size=10Gi
 
-#openshift_hosted_metrics_public_url=https://hawkular-metrics.apps.${GUID}.example.opentlc.com/hawkular/metrics
 
 ###########################################################################
 ### OpenShift Logging Vars
@@ -112,9 +112,7 @@ openshift_master_htpasswd_file=/root/htpasswd.openshift
 #openshift_hosted_logging_storage_volume_name=logging
 #openshift_hosted_logging_storage_volume_size=10Gi
 
-#openshift_hosted_logging_hostname=kibana.apps.${GUID}.example.opentlc.com
 #openshift_hosted_logging_elasticsearch_cluster_size=1
-#openshift_master_logging_public_url=https://kibana.apps.${GUID}.example.opentlc.com
 
 
 ###########################################################################
@@ -143,6 +141,7 @@ openshift_hosted_router_replicas=3
 masters
 nodes
 etcd
+new_nodes
 #lb
 #nfs
 
@@ -173,3 +172,6 @@ ocp-master3.example.com openshift_hostname=ocp-master3.example.com openshift_sch
 
 ocp-node1.example.com openshift_node_labels="{'region': 'primary', 'zone': 'east'}" openshift_hostname=ocp-node1.example.com
 ocp-node2.example.com openshift_node_labels="{'region': 'primary', 'zone': 'west'}" openshift_hostname=ocp-node2.example.com
+ocp-node3.example.com openshift_node_labels="{'region': 'primary', 'zone': 'west', 'color':'green'}" openshift_schedulable=true openshift_hostname=ocp-node3.example.com
+
+[new_nodes]

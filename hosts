@@ -61,3 +61,15 @@ osp11
 
 [satellite]
 192.168.122.8 ip=192.168.122.8 name=satellite62 vcpu=2 memory=10 disk=50
+
+[ceph-man]
+192.168.122.90 ip=192.168.122.90 name=ceph01 vcpu=1 memory=2 disk=40
+[ceph-mon]
+192.168.122.91 ip=192.168.122.91 name=ceph02 vcpu=1 memory=2 disk=40
+192.168.122.92 ip=192.168.122.92 name=ceph03 vcpu=1 memory=2 disk=40
+192.168.122.93 ip=192.168.122.93 name=ceph04 vcpu=1 memory=2 disk=40
+#192.168.122.94 ip=192.168.122.94 name=ceph05 vcpu=1 memory=2 disk=40
+[ceph:children]
+ceph-man
+ceph-mon
+
